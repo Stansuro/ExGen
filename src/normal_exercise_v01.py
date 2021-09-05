@@ -1,4 +1,4 @@
-import src.exercise_definitions.exercise as exercise
+import src.exercise as exercise
 
 import simplenlg as nlg
 from simplenlg import LexicalCategory as lexcat
