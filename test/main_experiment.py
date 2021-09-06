@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+import pandas as pd
 from nltk.sem.logic import ExpectedMoreTokensException
 import spacy
 nlp = spacy.load("en_core_web_trf")
@@ -11,8 +12,8 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 #print(parentdir)
 
-from binomial_exercise_v02 import BinomialExercise
-from normal_exercise_v01 import NormalExercise
+from src.exercise_definitions.binomial_exercise_v02 import BinomialExercise
+from src.exercise_definitions.normal_exercise_v01 import NormalExercise
 import pickle
 import random
 import numpy as np
@@ -344,10 +345,12 @@ class GenerationController:
         if any([(i in expose) for i in ['>', '<', '|']]):
             return None
         
-        return expose, questions, str(arrangement), validity, coherence, cos
+        return expose, arrangement
 
 def main(p_hardness='easy',p_nucleus=0.95, p_cosdist=0.4, p_nsplogit=0.7, p_conflict=(0.5,0.2)):
     threshold = 10000
+    count = 0
+    df = pd.read_csv('App/test_dataset.csv', sep=';')
 
     # =============== HELPERS ================================================
     def get_model():
@@ -475,51 +478,9 @@ def main(p_hardness='easy',p_nucleus=0.95, p_cosdist=0.4, p_nsplogit=0.7, p_conf
 
     # =============== PARAMS =================================================
 
-    MODEL_DIR = 'ilm_model'
+    MODEL_DIR = 'ilm-master/models'
     _blank_str = ' _'
     _wordblank_str = ' §'
-    num_instances = 50
-
-    # =============== INPUTS =================================================
-    print("""
-Welcome to generating your very own training exercise!
-Let's start by configuring your exercise."""
-    )
-
-    # Setup sample problem
-    config = {
-            "SUBJ": "light",
-            "SUBJ_COMP": "traffic",
-            "SUBJ_COMP_POS": "L",
-            "VERB": "is",
-            "CONJ": "green",
-            "ACOMP": "red",
-            "SUBJ_PLURAL": False,
-            }
-
-    prefix = input("""
-Input a prompt to set the context of your exercise (complete sentences, enter to proceed): 
-    """).strip()
-
-    idt = InputDialogTree()
-    config = idt.config
-    if idt.discreteness_indicator == 'D':
-        exercise_type = BinomialExercise
-    else:
-        exercise_type = NormalExercise
-    
-    hardness = None
-    while not hardness:
-        hardness = input("""
-How hard do you want your exercise to be? (Easy/Medium/Hard) 
-    """).strip().lower()
-        if hardness not in ['easy','medium','hard']:
-            hardness=None
-
-    # =============== GENERATION =============================================
-    print("""
-Your inputs have been recorded!
-Working on creating exercises...""")
 
     model = get_model()
     tokenizer, additional_tokens_to_ids = get_tokenizer()
@@ -533,7 +494,7 @@ Working on creating exercises...""")
     nli_tokenizer = AutoTokenizer.from_pretrained('microsoft/deberta-large-mnli')
 
     coh_tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-    coh_model = BertForNextSentencePrediction.from_pretrained('nsp_model')
+    coh_model = BertForNextSentencePrediction.from_pretrained('nsp2')
     coh_model.eval()
     #coh_model.to(device)
     cos_model = SentenceTransformer('paraphrase-MiniLM-L12-v2')
@@ -541,32 +502,96 @@ Working on creating exercises...""")
     cos_model.to(device)
 
     g = GenerationController(max_statement_chunks=2, max_infill_sents=1)
-    instances = []
     torch.manual_seed(0)
     np.random.seed(0)
     random.seed(0)
-    for i in range(threshold):
-        instance = g.instantiate(exercise_type, infill_text,check_constraint_conflicts,check_consecutive_coherence,check_coherece_to_prompt, prefix, config, hardness, _blank_str, _wordblank_str)
+    i = 0
+    while i < threshold and count<100:
+        config = {}
+        if df.iloc[i % len(df.index), 4] == 'D':
+            exercise_type = BinomialExercise
+            config['CONJ'] = df.iloc[i % len(df.index), 5]
+            config['ACOMP'] = df.iloc[i % len(df.index), 6]
+        else:
+            exercise_type = NormalExercise
+            txt = df.iloc[i % len(df.index), 9]
+            unit = factory.createInflectedWord(lexicon.getWord(txt,nlg.LexicalCategory.NOUN),nlg.LexicalCategory.NOUN)
+            if len(txt) > 3 and not '/' in txt:
+                unit.setFeature(f.NUMBER,nlg.NumberAgreement.PLURAL)
+            config['UNIT'] = unit
+            config['VALRANGE'] = df.iloc[i % len(df.index), 10]
+        
+        doc = nlp(df.iloc[i % len(df.index), 7])
+        if len(doc) == 1:
+            nsubj = doc[0].lemma_
+            subj = factory.createNounPhrase(nsubj)
+            if doc[0].lemma_!=doc[0].text:
+                subj.setPlural=True    # TODO fix, not working
+        elif len(doc)==2:
+            mod,comp=None,None
+            for j,token in enumerate(doc):
+                if token.dep_=='ROOT':
+                    nsubj = token.lemma_
+                if token.dep_=='compound':
+                    if j==0:
+                        mod='L'
+                        comp=token.lemma_
+                    else:
+                        mod='R'
+                        comp=token.lemma_
+            subj = factory.createNounPhrase(nsubj)
+            if mod=='L' and comp:
+                subj.setPreModifier(comp)
+            if mod=='R' and comp:
+                subj.setPostModifier(comp)
+        config['SUBJ'] = subj
+        config['VERB'] = df.iloc[i % len(df.index), 8]
+
+        instance = g.instantiate(exercise_type, infill_text,check_constraint_conflicts,check_consecutive_coherence,check_coherece_to_prompt, df.iloc[i % len(df.index), 3], config, p_hardness, _blank_str, _wordblank_str)
         if instance:
+            count += 1
             # =============== OUTPUTS ================================================
-            with open('logs.csv','a+') as f:
-                f.write(
+            with open('logs.csv','a+') as myfile:
+                myfile.write(
                         str(i) + "," + \
-                        "'" + p_hardness) + "'" + "," + \
+                        str(count) + "," + \
+                        str(df.iloc[i % len(df.index), 0]) + "," + \
+                        str(df.iloc[i % len(df.index), 1]) + "," + \
+                        str(df.iloc[i % len(df.index), 2]) + "," + \
+                        "'" + p_hardness + "'" + "," + \
                         str(p_nucleus) + "," + \
                         str(p_cosdist) + "," + \
                         str(p_nsplogit) + "," + \
                         str(p_conflict) + "," + \
-                        "'" + expose.replace("'",'"') + "'" + "\n"
+                        "'" + instance[0].replace("'",'"') + "'" + "," +
+                        "'" + ''.join(instance[1]) + "'" + "\n"
                         )
+            print('SUCCESS')
 
         # TODO test truecase
-        print(f"{i+1}/{num_instances} instances done...")
+        print(f"{i+1}/X instances done...")
+        i += 1
+
 
 if __name__=='__main__':
-    for p_hardness in ['medium','easy','hard']
+    with open('logs.csv','a+') as myfile:
+        myfile.write(
+                "Iteration," + \
+                "Count," + \
+                "StoryID," + \
+                "Num_Sents," + \
+                "Num_Chars," + \
+                "Hardness," + \
+                "Nucleus," + \
+                "CosDistThresh," + \
+                "NSPLogitThresh," + \
+                "ConflictThresh," + \
+                "Text," + \
+                "Arrangement\n"
+                )
+    for p_hardness in ['easy','medium','hard']:
         for p_nucleus in [0.95,0.99]:
-            for p_cosdist in [.2,.4]:
+            for p_cosdist in [.4,.2]:
                 for p_nsplogit in [.7,.9]:
                     for p_conflict in [(.5,.2),(.7,.15)]:
                         main(p_hardness,p_nucleus,p_cosdist,p_nsplogit,p_conflict)
