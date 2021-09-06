@@ -1,0 +1,44 @@
+﻿ID;Num_Sents;Num_Chars;Prompt;Discreteness_Indicator;CONJ;ACOMP;SUBJ;VERB;UNIT;VALRANGE
+1;2;77;My factory is recently having quality issues. We produce small plastic parts.;D;intact;defect;part;is;;
+2;2;114;I am searching for a car currently. I have also visited many dealerships already, but all cars have boring colors.;D;black;white;car;is;;
+3;3;125;I am currently very busy writing my thesis. I am writing many pages every day. This can be very exhausting from time to time.;D;productive;lazy;day;is;;
+4;3;125;I am currently very busy writing my thesis. I am writing many pages every day. This can be very exhausting from time to time.;C;;;content;is;page;10
+5;2;144;Germany is known for ist well maintained highways. Because of this great infrastructure German drivers can drive faster than in other countries.;C;;;speed;is;km/h;180
+6;2;104;The Siberian Fox is an endangered animal. Hunters shoot espeacially the female foxes for their soft fur.;D;male;female;fox;is;;
+7;3;157;The Siberian Fox is an endangered animal. Hunters shoot espeacially the female foxes for their soft fur. This has lead to organizations like PETA to step in.;D;male;female;fox;is;;
+8;2;89;Today my teacher measured our height. We then performed analysis on the data we gathered.;C;;;height;is;cm;170
+9;3;120;Today my teacher measured our height. We did this in our math class. We then performed analysis on the data we gathered.;C;;;height;is;cm;170
+10;2;95;I love driving my car, but I hate sitting in traffic. That is why I do not like traffic lights.;D;red;green;traffic light;is;;
+11;3;159;I love driving my car, but I hate sitting in traffic. This happens most often at a specific traffic light on my way to work. That is why I hate traffic lights.;D;red;green;traffic light;is;;
+12;2;114;Todays music industry supports many short songs. This is because short songs can generate more streams on Spotify.;C;;;song length;is;s;140
+13;2;101;Many startups are founded in the Silicon Valley. Though not all of them become sustainable companies.;D;failed;successful;startup;is;;
+14;3;142;Many startups are founded in the Silicon Valley. Though not all of them become sustainable companies. This is mostly because of mismanagement.;D;failed;successful;startup;is;;
+15;2;94;The local paper factory is very famous. It produces the worlds thinnest paper in high quality.;C;;;thickness;is;nm;30
+16;3;130;In my free time I like to guess peoples heights. I am now very good at it. My guessing errors are getting smaller from day to day.;C;;;error;is;mm;20
+17;2;104;In my free time I like to guess peoples heights. My guessing errors are getting smaller from day to day.;C;;;error;is;mm;20
+18;2;118;Germany is facing the issue of its population getting older. This is partly due to the fact that less people get born.;C;;;birth rate;is;births/year;1000000
+19;3;153;Germany is facing the issue of its population getting older. One reason for that is that people live longer. Another reason is that less people get born.;C;;;birth rate;is;births/year;1000000
+20;2;142;I work at a factory where we produce many products, but only two variants of them sell a lot. They are considered our most important products.;D;blue;yellow;product;is;;
+21;3;153;Typing is one of the most sought after skills in business. If you can type quickly, it helps you a lot. That is why my school is offering typing courses.;C;;;speed;is;characters/min;400
+22;2;103;Typing is one of the most sought after skills in business. If you can type quickly, it helps you a lot.;C;;;speed;is;characters/min;400
+23;2;107;Germany is home to many wealthy people. Relative to other countries, the average German is considered rich.;C;;;income;is;EUR;60000
+24;2;121;A credit card company has to monitor many transactions per day. Some of these transactions are fraudulent and cause harm.;D;fraudulent;authentic;transaction;is;;
+25;3;156;A credit card company has to monitor many transactions per day. Some of these transactions are fraudulent and cause harm. Detecting these from data is hard.;D;fraudulent;authentic;transaction;is;;
+26;2;131;Working in a sales department I receive many E-Mails per day. But only a small number of them are relevant to me, the rest is spam.;D;spam;relevant;mail;is;;
+27;3;170;Working in a sales department I receive many E-Mails per day. But only a small number of them are relevant to me, the rest is spam. I can hardly check all mails manually.;D;spam;relevant;mail;is;;
+28;2;149;The average human drinks too little water per day. This phenomenon in conjunction with an unhealty diet has led to high obesity in western countries.;C;;;water consumption;is;ml;500
+29;2;149;The average human drinks too little water per day. This phenomenon in conjunction with an unhealty diet has led to high obesity in western countries.;D;healthy;obese;citizen;is;;
+30;2;101;London is known for being a very rainy city. It is one of many cities in england with that reputation;D;rainy;sunny;day;is;;
+31;2;101;London is known for being a very rainy city. It is one of many cities in england with that reputation;C;;;downfall;is ;cm;10
+32;2;129;Many people visiting clubs in Berlin are underage. Police is controlling many young people to detect those who who are too young.;D;underage;mature;suspect;is;;
+33;2;86;Sometimes I wish I would live in California. The sun is shining much more often there.;D;rainy;sunny;day;is;;
+34;3;137;Sometimes I wish I would live in California. The sun is shining much more often there. This is also the reason why many people move there;D;rainy;sunny;day;is;;
+35;2;86;Sometimes I wish I would live in California. The sun is shining much more often there.;C;;;sunniness;is;h/day;11
+36;3;137;Sometimes I wish I would live in California. The sun is shining much more often there. This is also the reason why many people move there;C;;;sunniness;is;h/day;11
+37;2;122;I work as a sales assistent in a local fashion shop. Many of our customers are happy with what they buy, but some are not.;D;happy;unhappy;customer;is;;
+38;3;173;I work as a sales assistent in a local fashion shop. Many of our customers are happy with what they buy, but some are not. They come back ater one day and return their item.;D;happy;unhappy;customer;is;;
+39;3;150;Plants try to catch as much light as possible with their leaves. More light for them entails more growth. Though, the lengths of their leafs can vary.;C;;;leaf;is;cm;30
+40;2;90;Human intelligence can be measured in IQ points. The higher the IQ, the smarter the human.;C;;;IQ;is;point;90
+41;3;118;Human intelligence can be measured in IQ points. The higher the IQ, the smarter the human. Very smart humans are rare.;C;;;IQ;is;point;90
+42;2;144;When playing a soccer match, the decision of who gets the first kickoff is decided by chance. The referee throws a coin to determine who starts.;D;heads;tails;cointhrow;is;;
+43;3;146;Many gambling games can be broken down to sheer luck. This goes for sports bets as well as casinos in Las Vegas. Anyway many people try their luck;D;won;lost;game;is;;
