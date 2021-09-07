@@ -28,8 +28,8 @@
 27;3;170;Working in a sales department I receive many E-Mails per day. But only a small number of them are relevant to me, the rest is spam. I can hardly check all mails manually.;D;spam;relevant;mail;is;;
 28;2;149;The average human drinks too little water per day. This phenomenon in conjunction with an unhealty diet has led to high obesity in western countries.;C;;;water consumption;is;ml;500
 29;2;149;The average human drinks too little water per day. This phenomenon in conjunction with an unhealty diet has led to high obesity in western countries.;D;healthy;obese;citizen;is;;
-30;2;101;London is known for being a very rainy city. It is one of many cities in england with that reputation;D;rainy;sunny;day;is;;
-31;2;101;London is known for being a very rainy city. It is one of many cities in england with that reputation;C;;;downfall;is ;cm;10
+30;2;101;London is known for being a very rainy city. It is one of many cities in england with that reputation.;D;rainy;sunny;day;is;;
+31;2;101;London is known for being a very rainy city. It is one of many cities in england with that reputation.;C;;;downfall;is ;cm;10
 32;2;129;Many people visiting clubs in Berlin are underage. Police is controlling many young people to detect those who who are too young.;D;underage;mature;suspect;is;;
 33;2;86;Sometimes I wish I would live in California. The sun is shining much more often there.;D;rainy;sunny;day;is;;
 34;3;137;Sometimes I wish I would live in California. The sun is shining much more often there. This is also the reason why many people move there.;D;rainy;sunny;day;is;;
