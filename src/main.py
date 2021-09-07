@@ -50,7 +50,7 @@ class InputDialogTree:
         # Get entity of interest
         while not subj:
             txt = input("""
-What is the random variable in your exercise? (single word)
+What is the random variable in your exercise? (max. 2 words)
     """).strip().lower()
             doc = nlp(txt)
             if len(doc) == 1:
