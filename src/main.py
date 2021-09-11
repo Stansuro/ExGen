@@ -338,13 +338,14 @@ class GenerationController:
         #print(sents)
         cos_prompt = coh_prompt_fn(sent_tokenize(prefix),[i for i,j in zip(sents[prefix_sents_amt-1:],arrangement) if j=='I'])
 
+        v = True
         if not validity or not all(coherence) or not all(cos) or not all(cos_prompt):
-            return None
+            v = False
         
         if any([(i in expose) for i in ['>', '<', '|']]):
-            return None
+            v = False
         
-        return expose, questions, str(arrangement), validity, coherence, cos
+        return expose, questions, str(arrangement), validity, coherence, cos, v
 
 def main():
     # =============== HELPERS ================================================
@@ -545,12 +546,12 @@ Working on creating exercises...""")
     random.seed(0)
     for i in range(num_instances):
         instance = g.instantiate(exercise_type, infill_text,check_constraint_conflicts,check_consecutive_coherence,check_coherece_to_prompt, prefix, config, hardness, _blank_str, _wordblank_str)
-        if instance:
+        if instance[6]:
             # =============== OUTPUTS ================================================
             print("""
 Here you go, your individual exercise!""")
 
-            e,q,a,v,coh,cos = instance
+            e,q,a,v,coh,cos,v = instance
             s = '\n' + "=" * 10 + f" Instance {i} " + "="*90
             s += """
 Expose
@@ -561,7 +562,18 @@ Questions
             print(a,v, str(coh), str(cos))
             print(s)
 
-            with open('out.txt', 'a+') as f:
+            with open('out_valid.txt', 'a+') as f:
+              f.write(s)
+        else:
+            e,q,a,v,coh,cos,v = instance
+            s = '\n' + "=" * 10 + f" Instance {i} " + "="*90
+            s += """
+Expose
+    """ + e
+            s += """
+Questions
+    """ + '\n    '.join(q) + '\n\n'
+            with open('out_invalid.txt', 'a+') as f:
               f.write(s)
 
         # TODO test truecase
