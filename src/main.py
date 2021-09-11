@@ -379,7 +379,8 @@ def main():
                             model,
                             additional_tokens_to_ids,
                             context_ids,
-                            num_infills=1
+                            num_infills=1,
+                            nucleus=0.5
                         )[0]    # TODO test temp and nucleus parameters
         return ilm.tokenize_util.decode(generation, tokenizer)
 
@@ -400,7 +401,7 @@ def main():
                 coh.append(True)
 
             cos_dist = util.pytorch_cos_sim(cos_model.encode(s1, convert_to_tensor=True).to(device), cos_model.encode(s2, convert_to_tensor=True).to(device))
-            if cos_dist.item() < 0.4:
+            if cos_dist.item() < 0.2:
                 cos.append(True)
             else:
                 cos.append(False)
@@ -441,7 +442,7 @@ def main():
         for i,c in enumerate(candidates):
             for s in prompt:
                 cos_dist = util.pytorch_cos_sim(cos_model.encode(s, convert_to_tensor=True).to(device), cos_model.encode(c, convert_to_tensor=True).to(device))
-                if cos_dist.item() < 0.4:
+                if cos_dist.item() < 0.2:
                     cos.append(True)
                 else:
                     #print(cos_dist,c,s)
@@ -475,7 +476,7 @@ def main():
     MODEL_DIR = 'ilm_model'
     _blank_str = ' _'
     _wordblank_str = ' §'
-    num_instances = 50
+    num_instances = 100
 
     # =============== INPUTS =================================================
     print("""
